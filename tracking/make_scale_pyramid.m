@@ -7,7 +7,12 @@ function pyramid = make_scale_pyramid(im, targetPosition, in_side_scaled, out_si
 %   Luca Bertinetto, Jack Valmadre, Joao F. Henriques, 2016
 % -----------------------------------------------------------------------------------------------------
     in_side_scaled = round(in_side_scaled);
-    pyramid = gpuArray(zeros(out_side, out_side, 3, p.numScale, 'single'));
+    if isempty(p.gpus)
+        pyramid = zeros(out_side, out_side, 3, p.numScale, 'single');
+    else
+        pyramid = gpuArray(zeros(out_side, out_side, 3, p.numScale, 'single'));
+    end  
+            
     max_target_side = in_side_scaled(end);
     min_target_side = in_side_scaled(1);
     beta = out_side / min_target_side;

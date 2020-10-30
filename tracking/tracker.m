@@ -65,7 +65,11 @@ function bboxes = tracker(varargin)
     zFeatId = net_z.getVarIndex(p.id_feat_z);
     scoreId = net_x.getVarIndex(p.id_score);
     % get the first frame of the video
-    im = gpuArray(single(imgFiles{startFrame}));
+    if isempty(p.gpus)
+        im = single(imgFiles{startFrame});
+    else
+        im = gpuArray(single(imgFiles{startFrame}));
+    end
     % if grayscale repeat one channel to match filters size
 	if(size(im, 3)==1)
         im = repmat(im, [1 1 3]);
@@ -114,7 +118,12 @@ function bboxes = tracker(varargin)
     for i = startFrame:nImgs
         if i>startFrame
             % load new frame on GPU
-            im = gpuArray(single(imgFiles{i}));
+            if isempty(p.gpus)
+                im = single(imgFiles{i});
+            else
+                im = gpuArray(single(imgFiles{i}));
+            end    
+            
    			% if grayscale repeat one channel to match filters size
     		if(size(im, 3)==1)
         		im = repmat(im, [1 1 3]);

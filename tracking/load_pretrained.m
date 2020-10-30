@@ -28,7 +28,8 @@ function net = load_pretrained(netPath, gpu)
     % init specified GPU
     if ~isempty(gpu)
        gpuDevice(gpu)
+       net.move(gpu);
     end
-    net.move('gpu');
+    
     net.mode = 'test'; % very important for batch norm, we now use the stats accumulated during training.
 end
